@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-model = genai.GenerativeModel('gemini-1.5-flash')
+model = genai.GenerativeModel('gemini-2.5-flash')
 
 db_path = os.path.join(os.path.dirname(__file__), 'ecommerce_data.db')
 engine = create_engine(f'sqlite:///{db_path}')
@@ -28,13 +28,21 @@ def get_sql_query(question: str) -> str:
     """Gets the SQL query from the LLM."""
     schema = get_db_schema()
     prompt = f"""
-    Based on the database schema below, write a single, executable SQL query to answer the user's question.
-Pay close attention to derived metrics like CPC (Cost Per Click) or RoAS (Return on Ad Spend).
+You are an expert SQL assistant. Based on the database schema below, generate a precise SQL query to answer the user's question.
 
-**IMPORTANT RULES:**
-1.  **CPC Calculation:** To calculate Cost Per Click, use the formula `ad_spend / clicks`.
-2.  **Avoid Division by Zero:** When calculating CPC, you MUST exclude any rows where `clicks` is 0. Use a `WHERE clicks > 0` clause.
-3.  Only return the SQL query and nothing else. Do not wrap it in markdown.
+⚠️ VERY IMPORTANT RULES:
+1. CPC = ad_spend / clicks
+2. RoAS = ad_sales / ad_spend
+3. Avoid division by zero (use WHERE clicks > 0 or ad_spend > 0)
+4. Return SQL only, without any markdown or commentary.
+
+📘 EXAMPLES:
+
+Q: Which product has the highest CPC?
+SQL: SELECT item_id, ad_spend * 1.0 / clicks AS cpc FROM ad_sales WHERE clicks > 0 ORDER BY cpc DESC LIMIT 1;
+
+Q: What is the total number of units sold?
+SQL: SELECT SUM(units_sold) AS total_units_sold FROM ad_sales;
 
     Schema:
     {schema}
@@ -43,7 +51,11 @@ Pay close attention to derived metrics like CPC (Cost Per Click) or RoAS (Return
     SQL Query:
     """
     response = model.generate_content(prompt)
-    return response.text.strip().replace('`', '').replace('sql', '').strip()
+    print("Prompt sent to Gemini:\n", prompt)
+    print("Raw LLM response:\n", response.text)
+    response_text = response.text.strip().replace('`', '').replace('sql', '').strip()
+    sql_query = response_text.split(';')[0].strip() + ';'
+    return sql_query
 
 def execute_sql_query(query: str):
     """Executes the SQL query and returns the result."""
