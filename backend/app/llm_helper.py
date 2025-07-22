@@ -32,7 +32,7 @@ def get_sql_query(question: str) -> str:
 Pay close attention to derived metrics like CPC (Cost Per Click) or RoAS (Return on Ad Spend).
 
 **IMPORTANT RULES:**
-1.  **CPC Calculation:** To calculate CPC, use the formula `ad_spend / clicks`.
+1.  **CPC Calculation:** To calculate Cost Per Click, use the formula `ad_spend / clicks`.
 2.  **Avoid Division by Zero:** When calculating CPC, you MUST exclude any rows where `clicks` is 0. Use a `WHERE clicks > 0` clause.
 3.  Only return the SQL query and nothing else. Do not wrap it in markdown.
 
