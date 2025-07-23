@@ -34,15 +34,15 @@ You are an expert SQL assistant. Based on the database schema below, generate a 
 1. CPC = ad_spend / clicks
 2. RoAS = ad_sales / ad_spend
 3. Avoid division by zero (use WHERE clicks > 0 or ad_spend > 0)
-4. Return SQL only, without any markdown or commentary.
+4. If the question doesn't require SQL (like greetings, casual talk, etc.), just return this string exactly: NO_SQL_NEEDED
+5. Return SQL only, without any markdown or commentary.
 
 📘 EXAMPLES:
-
 Q: Which product has the highest CPC?
 SQL: SELECT item_id, ad_spend * 1.0 / clicks AS cpc FROM ad_sales WHERE clicks > 0 ORDER BY cpc DESC LIMIT 1;
 
-Q: What is the total number of units sold?
-SQL: SELECT SUM(units_sold) AS total_units_sold FROM ad_sales;
+Q: Hello
+SQL: NO_SQL_NEEDED
 
     Schema:
     {schema}
@@ -54,6 +54,8 @@ SQL: SELECT SUM(units_sold) AS total_units_sold FROM ad_sales;
     print("Prompt sent to Gemini:\n", prompt)
     print("Raw LLM response:\n", response.text)
     response_text = response.text.strip().replace('`', '').replace('sql', '').strip()
+    if "NO_SQL_NEEDED" in response_text:
+      return "NO_SQL_NEEDED"
     sql_query = response_text.split(';')[0].strip() + ';'
     return sql_query
 
@@ -64,6 +66,17 @@ def execute_sql_query(query: str):
         rows = result.fetchall()
         columns = result.keys()
         return [dict(zip(columns, row)) for row in rows]
+    
+def get_general_response(question: str):
+    """Use LLM to respond to general, non-SQL queries."""
+    prompt = f"""
+The user asked: "{question}"
+This is a general greeting or conversation (not related to database).
+Reply in a helpful and friendly tone.
+"""
+    response = model.generate_content(prompt)
+    return response.text.strip()
+
 
 def get_human_readable_answer_stream(question: str, query_result):
     """Gets a human-readable answer from the LLM as a stream."""
@@ -75,3 +88,5 @@ def get_human_readable_answer_stream(question: str, query_result):
     response = model.generate_content(prompt, stream=True)
     for chunk in response:
         yield chunk.text
+        
+        
