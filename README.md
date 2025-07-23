@@ -78,8 +78,8 @@ Follow these steps precisely to get the application running on your local machin
 
 1.  **Clone the Repository:**
     ```bash
-    git clone <your-repository-url>
-    cd e-commerce-ai-agent
+    git clone https://github.com/ReddyAkash/AI-Agent-Anarix.git
+    cd AI-Agent-Anarix
     ```
 
 2.  **Navigate to the Backend Directory:**
@@ -131,7 +131,7 @@ Follow these steps precisely to get the application running on your local machin
 ### Step 4: Access the Frontend
 
 1.  **Open Your Web Browser:**
-    * Navigate to the following URL: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
+    * Wait for 1 to 2 seconds the chatbot automatically opens in the browser or else navigate to the following URL: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
 2.  The chat interface should load, and you can now start asking questions!
 
 ---
