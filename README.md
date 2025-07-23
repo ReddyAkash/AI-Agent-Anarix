@@ -10,7 +10,6 @@ The agent is built with a sophisticated backend using Python, FastAPI, and Googl
 
 * **Natural Language to SQL:** Translates complex user questions like "What was my total revenue last month?" into precise SQL queries.
 * **Conversational AI:** Engages in general conversation, recognizing when a question does not require database access (e.g., "Hello", "How are you?").
-* **Hybrid Logic Engine:** For known-problematic or critical questions (like "what is the highest CPC?"), the agent uses pre-written, guaranteed-correct SQL queries to ensure 100% accuracy.
 * **Real-time Streaming:** Answers are streamed back to the user word-by-word, creating an interactive "live typing" effect.
 * **Self-Contained Web Application:** The FastAPI backend serves the frontend, allowing the entire project to be run from a single command.
 
