@@ -140,5 +140,4 @@ Follow these steps precisely to get the application running on your local machin
 
 * **Simple Data Query:** `what is my total sales?`
 * **Conversational Query:** `hello, who are you?`
-* **Hybrid Logic Query (Guaranteed Accuracy):** `which product had the highest cpc?`
-* **Chart Visualization Query:** `visualize my revenue by product name` or `create a bar chart of clicks for each campaign`
+* **Data related Query:** `which product had the highest cpc?`
