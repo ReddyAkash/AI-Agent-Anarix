@@ -21,27 +21,29 @@ The agent is built with a sophisticated backend using Python, FastAPI, and Googl
 
 The repository is organized into two main parts: `backend` and `frontend`.
 
+```
 e-commerce-ai-agent/
 │
 ├── backend/
 │   ├── app/
-│   │   ├── init.py           # Makes 'app' a Python package
-│   │   ├── main.py               # The core FastAPI application logic
-│   │   ├── llm_helper.py         # Handles Gemini LLM and Matplotlib interactions
-│   │   └── database_setup.py     # Script to create the database from CSVs
+│   │   ├── __init__.py
+│   │   ├── main.py
+│   │   ├── llm_helper.py
+│   │   └── database_setup.py
 │   │
 │   ├── data/
-│   │   ├── ad_sales.csv          # (Placeholder) Your advertising sales data
-│   │   ├── total_sales.csv       # (Placeholder) Your total product sales data
-│   │   └── eligibility.csv       # (Placeholder) Your product eligibility data
+│   │   ├── ad_sales.csv
+│   │   ├── total_sales.csv
+│   │   └── eligibility.csv
 │   │
-│   ├── .env                    # Stores your secret API key
-│   ├── .gitignore              # Specifies files for Git to ignore
-│   ├── requirements.txt        # Lists all Python dependencies
-│   └── run.py                  # Main script to start the application
+│   ├── .env
+│   ├── .gitignore
+│   ├── requirements.txt
+│   └── run.py
 │
 └── frontend/
-└── index.html              # The single-page chat interface
+    └── index.html
+```
 
 ---
 
