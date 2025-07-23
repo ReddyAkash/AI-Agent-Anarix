@@ -1,124 +1,142 @@
-# AI-Agent-Anarix
+# E-commerce AI Agent 🤖
 
-AI-Agent-Anarix is an AI-powered E-commerce analytics assistant. It allows users to ask natural language questions about their e-commerce data and receive insightful answers powered by a Large Language Model (LLM). The project features a FastAPI backend, a modern JavaScript frontend, and integration with Google Gemini for LLM capabilities.
+An advanced AI-powered chatbot designed to answer questions about e-commerce data. It provides a user-friendly chat interface where users can ask questions in natural language, and the agent understands the user's intent, queries a database, and returns answers in a human-readable format.
 
----
-
-## Features
-
-- **Conversational Analytics:** Ask questions about your e-commerce data in plain English.
-- **LLM-Powered:** Uses Google Gemini to generate SQL queries and human-readable answers.
-- **Interactive Chat UI:** Clean, responsive frontend for seamless user experience.
-- **Streaming Responses:** Answers are streamed in real-time for a chat-like feel.
+The agent is built with a sophisticated backend using Python, FastAPI, and Google's Gemini LLM, and a sleek, responsive frontend using HTML and Tailwind CSS.
 
 ---
 
-## Tech Stack
+## ✨ Key Features
 
-- **Backend:** Python, FastAPI, SQLAlchemy, Google Generative AI (Gemini), SQLite
-- **Frontend:** HTML, CSS, JavaScript (Vanilla)
-- **Other:** dotenv for environment variables, CORS middleware
-
----
-
-## Project Structure
-
-```
-.
-├── backend
-│   ├── app
-│   │   ├── api
-│   │   │   ├── v1
-│   │   │   │   ├── endpoints
-│   │   │   │   └── __init__.py
-│   │   │   └── __init__.py
-│   │   ├── core
-│   │   │   ├── config.py
-│   │   │   └── __init__.py
-│   │   ├── db
-│   │   │   ├── base_class.py
-│   │   │   ├── session.py
-│   │   │   └── __init__.py
-│   │   ├── models
-│   │   │   ├── user.py
-│   │   │   └── __init__.py
-│   │   ├── schemas
-│   │   │   ├── user.py
-│   │   │   └── __init__.py
-│   │   ├── services
-│   │   │   ├── user.py
-│   │   │   └── __init__.py
-│   │   ├── __init__.py
-│   │   └── main.py
-│   ├── alembic
-│   │   ├── env.py
-│   │   ├── script.py.mako
-│   │   └── versions
-│   │       └── README
-│   ├── requirements.txt
-│   └── README.md
-└── frontend
-    ├── index.html
-    ├── script.js
-    ├── style.css
-    └── README.md
-```
+* **Natural Language to SQL:** Translates complex user questions like "What was my total revenue last month?" into precise SQL queries.
+* **Conversational AI:** Engages in general conversation, recognizing when a question does not require database access (e.g., "Hello", "How are you?").
+* **Hybrid Logic Engine:** For known-problematic or critical questions (like "what is the highest CPC?"), the agent uses pre-written, guaranteed-correct SQL queries to ensure 100% accuracy.
+* **Dynamic Chart Visualization:** Generates and displays bar charts directly in the chat for queries that involve visualization keywords (e.g., "visualize sales by product").
+* **Real-time Streaming:** Answers are streamed back to the user word-by-word, creating an interactive "live typing" effect.
+* **Self-Contained Web Application:** The FastAPI backend serves the frontend, allowing the entire project to be run from a single command.
 
 ---
 
-## Installation
+## 📁 Project Structure
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/AI-Agent-Anarix.git
-   cd AI-Agent-Anarix
-   ```
-2. Set up the backend:
-   ```bash
-   cd backend
-   pip install -r requirements.txt
-   ```
-3. Set up the frontend:
-   ```bash
-   cd frontend
-   # No dependencies, just open index.html in a browser
-   ```
-4. Configure environment variables:
-   - Copy `.env.example` to `.env` in the `backend` directory and update the values as needed.
+The repository is organized into two main parts: `backend` and `frontend`.
 
----
-
-## Usage
-
-1. Start the backend server:
-   ```bash
-   cd backend
-   uvicorn app.main:app --reload
-   ```
-2. Open the frontend:
-   - Open `frontend/index.html` in a web browser.
+e-commerce-ai-agent/
+│
+├── backend/
+│   ├── app/
+│   │   ├── init.py           # Makes 'app' a Python package
+│   │   ├── main.py               # The core FastAPI application logic
+│   │   ├── llm_helper.py         # Handles Gemini LLM and Matplotlib interactions
+│   │   └── database_setup.py     # Script to create the database from CSVs
+│   │
+│   ├── data/
+│   │   ├── ad_sales.csv          # (Placeholder) Your advertising sales data
+│   │   ├── total_sales.csv       # (Placeholder) Your total product sales data
+│   │   └── eligibility.csv       # (Placeholder) Your product eligibility data
+│   │
+│   ├── .env                    # Stores your secret API key
+│   ├── .gitignore              # Specifies files for Git to ignore
+│   ├── requirements.txt        # Lists all Python dependencies
+│   └── run.py                  # Main script to start the application
+│
+└── frontend/
+└── index.html              # The single-page chat interface
 
 ---
 
-## Contributing
+## ⚙️ Code File Functionality
 
-1. Fork the repository
-2. Create a new branch (`git checkout -b feature-branch`)
-3. Make your changes
-4. Commit your changes (`git commit -am 'Add new feature'`)
-5. Push to the branch (`git push origin feature-branch`)
-6. Create a new Pull Request
+### Backend
+
+* **`run.py`**: The entry point of the application. It runs `database_setup.py` to ensure the database is ready and then starts the Uvicorn server for the FastAPI app.
+* **`app/main.py`**: The heart of the backend. It initializes FastAPI, serves the `index.html` frontend, and defines the crucial `/ask` API endpoint. It contains the hybrid logic to decide between a hardcoded query, an LLM-generated query, a general conversation, or a chart visualization.
+* **`app/llm_helper.py`**: Contains all helper functions that interact with external services. This includes `get_sql_query()`, `get_general_response()`, `execute_sql_query()`, and `generate_chart_image()`.
+* **`app/database_setup.py`**: A utility script that reads CSV files from the `/data` directory and loads them into a SQLite database (`ecommerce_data.db`).
+* **`requirements.txt`**: Defines the Python libraries needed for the project.
+* **`.env`**: A crucial security file (not committed to Git) where you store your `GEMINI_API_KEY`.
+* **`.gitignore`**: Prevents sensitive files (`.env`, `.db`) and clutter (`__pycache__`) from being committed to Git.
+
+### Frontend
+
+* **`index.html`**: A single, self-contained HTML file that creates the entire user interface using Tailwind CSS. Its embedded JavaScript handles all user interactions, such as sending questions to the backend and rendering the streaming text or chart responses.
 
 ---
 
-## License
+## 🚀 How to Run This Project
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Follow these steps precisely to get the application running on your local machine.
+
+### Step 1: Prerequisites
+
+* Make sure you have **Python 3.8** or newer installed.
+* You will need `pip` (Python's package installer), which typically comes with Python.
+
+### Step 2: Backend Setup
+
+1.  **Clone the Repository:**
+    ```bash
+    git clone <your-repository-url>
+    cd e-commerce-ai-agent
+    ```
+
+2.  **Navigate to the Backend Directory:**
+    ```bash
+    cd backend
+    ```
+
+3.  **Create and Activate a Virtual Environment** (Highly Recommended):
+    * **Windows:**
+        ```bash
+        python -m venv .venv
+        .\.venv\Scripts\activate
+        ```
+    * **macOS / Linux:**
+        ```bash
+        python3 -m venv .venv
+        source .venv/bin/activate
+        ```
+
+4.  **Install Dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+5.  **Set Up Your API Key:**
+    * Create a file named `.env` inside the `backend` directory.
+    * Add your Gemini API key to this file (get a key from [Google AI Studio](https://aistudio.google.com/)). The content should be:
+        ```
+        GEMINI_API_KEY="YOUR_API_KEY_HERE"
+        ```
+
+6.  **Add Your Data:**
+    * Place your three CSV files (`ad_sales.csv`, `total_sales.csv`, `eligibility.csv`) inside the `backend/data/` directory.
+
+### Step 3: Run the Application
+
+1.  **Start the Server:**
+    * While inside the `backend` directory, run the following command in your terminal:
+        ```bash
+        python run.py
+        ```
+
+2.  **Check the Terminal Output:**
+    * You should see output confirming the database was created, followed by Uvicorn starting the server. The last line should look like this:
+        ```
+        INFO:     Uvicorn running on [http://0.0.0.0:8000](http://0.0.0.0:8000) (Press CTRL+C to quit)
+        ```
+
+### Step 4: Access the Frontend
+
+1.  **Open Your Web Browser:**
+    * Navigate to the following URL: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
+2.  The chat interface should load, and you can now start asking questions!
 
 ---
 
-## Acknowledgments
+## 💬 Example Questions to Ask the Agent
 
-- Inspired by the need for intelligent data analysis tools
-- Powered by Google Gemini for advanced LLM capabilities
-- Built with passion by the Anarix team
+* **Simple Data Query:** `what is my total sales?`
+* **Conversational Query:** `hello, who are you?`
+* **Hybrid Logic Query (Guaranteed Accuracy):** `which product had the highest cpc?`
+* **Chart Visualization Query:** `visualize my revenue by product name` or `create a bar chart of clicks for each campaign`
